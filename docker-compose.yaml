@@ -4,8 +4,20 @@ services:
       context: .
       dockerfile: ./apps/reservations/Dockerfile
       target: development
-    command: pnpm run start:dev reservations
+    command: pnpm run start:dev reservations # override cmd defined in DockerFile
+    env_file:
+      - ./apps/reservations/.env
     ports:
       - '3000:3000'
+  auth:
+    build:
+      context: .
+      dockerfile: ./apps/auth/Dockerfile
+      target: development
+    command: pnpm run start:dev auth # override cmd defined in DockerFile
+    env_file:
+      - ./apps/auth/.env
+    ports:
+      - '3001:3000'
   mongo:
     image: mongo
