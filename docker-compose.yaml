@@ -18,6 +18,6 @@ services:
     env_file:
       - ./apps/auth/.env
     ports:
-      - '3001:3000'
+      - '3001:3001'
   mongo:
     image: mongo
