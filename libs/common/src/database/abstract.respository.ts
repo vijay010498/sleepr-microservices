@@ -16,7 +16,10 @@ export abstract class AbstractRespository<TDocument extends AbstractDocument> {
     return (await createdDocument.save()).toJSON() as unknown as TDocument;
   }
 
-  async findOne(filterQuery: FilterQuery<TDocument>): Promise<TDocument> {
+  async findOne(
+    filterQuery: FilterQuery<TDocument>,
+    notFoundError: Error = new NotFoundException('Document Not Found'),
+  ): Promise<TDocument> {
     // lean = remove all the internal mongoose properties and methods (Hydrated document), lean = gives only js normal object
     const document = await this.model
       .findOne(filterQuery)
@@ -26,7 +29,7 @@ export abstract class AbstractRespository<TDocument extends AbstractDocument> {
       this.logger.warn(
         `Document was not found with filterQuery: ${filterQuery} `,
       );
-      throw new NotFoundException('Document was not found');
+      throw notFoundError;
     }
 
     return document;

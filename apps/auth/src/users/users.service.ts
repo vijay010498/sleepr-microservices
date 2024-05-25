@@ -1,8 +1,35 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UsersRepository } from './users.repository';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
+  constructor(private readonly usersRepository: UsersRepository) {}
+  async create(createUserDto: CreateUserDto) {
+    return this.usersRepository.create({
+      ...createUserDto,
+      password: await bcrypt.hash(createUserDto.password, 10),
+    });
+  }
 
-  async create(createUserDto: CreateUserDto) {}
+  async verifyUser(email: string, password: string) {
+    const user = await this.usersRepository.findOne(
+      {
+        email,
+      },
+      new UnauthorizedException('Email/password is invalid'),
+    );
+    const passwordIsValid = await bcrypt.compare(password, user.password);
+
+    if (!passwordIsValid) {
+      throw new UnauthorizedException('Email/password is invalid');
+    }
+
+    return user;
+  }
 }
