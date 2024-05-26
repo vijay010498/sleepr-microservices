@@ -19,5 +19,15 @@ services:
       - ./apps/auth/.env
     ports:
       - '3001:3001'
+  payments:
+    build:
+      context: .
+      dockerfile: ./apps/payments/Dockerfile
+      target: development
+    command: pnpm run start:dev payments # override cmd defined in DockerFile
+    env_file:
+      - ./apps/payments/.env
+    ports:
+      - '3003:3003'
   mongo:
     image: mongo
