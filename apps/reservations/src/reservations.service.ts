@@ -1,30 +1,56 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { UpdateReservationDto } from './dto/update-reservation.dto';
 import { ReservationsRepository } from './reservations.repository';
+import { PAYMENT_SERVICE } from '@app/common';
+import { ClientProxy } from '@nestjs/microservices';
+import { map } from 'rxjs';
 
 @Injectable()
 export class ReservationsService {
-  constructor(private readonly reservationsRepo: ReservationsRepository) {}
-  create(createReservationDto: CreateReservationDto, userId: string) {
-    return this.reservationsRepo.create({
-      ...createReservationDto,
-      timestamp: new Date(),
-      userId,
-    });
+  constructor(
+    private readonly reservationsRepo: ReservationsRepository,
+    @Inject(PAYMENT_SERVICE) private readonly paymentsService: ClientProxy,
+  ) {}
+  async create(createReservationDto: CreateReservationDto, userId: string) {
+    // this.paymentsService
+    //   .send('create_charge', createReservationDto.charge)
+    //   .subscribe(async (response) => {
+    //     console.log(response);
+    //     const reservations = await this.reservationsRepo.create({
+    //       ...createReservationDto,
+    //       timestamp: new Date(),
+    //       userId,
+    //     });
+    //   });
+
+    // above and down both equal
+
+    return this.paymentsService
+      .send('create_charge', createReservationDto.charge)
+      .pipe(
+        map((res) => {
+          return this.reservationsRepo.create({
+            ...createReservationDto,
+            invoiceId: res.id,
+            timestamp: new Date(),
+            userId,
+          });
+        }),
+      );
   }
 
-  findAll() {
+  async findAll() {
     return this.reservationsRepo.find({});
   }
 
-  findOne(_id: string) {
+  async findOne(_id: string) {
     return this.reservationsRepo.findOne({
       _id,
     });
   }
 
-  update(_id: string, updateReservationDto: UpdateReservationDto) {
+  async update(_id: string, updateReservationDto: UpdateReservationDto) {
     return this.reservationsRepo.findOneAndUpdate(
       {
         _id,
@@ -35,7 +61,7 @@ export class ReservationsService {
     );
   }
 
-  remove(_id: string) {
+  async remove(_id: string) {
     return this.reservationsRepo.findOneAndDelete({
       _id,
     });
