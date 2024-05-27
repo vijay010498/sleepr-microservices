@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: reservations
+  name: reservations
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: reservations
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: reservations
+    spec:
+      containers:
+      - image: northamerica-northeast2-docker.pkg.dev/sleepr-424523/reservations/production
+        name: reservations
+        env:
+          - name: MONGODB_URI
+            valueFrom:
+              secretKeyRef:
+                name: mongodb
+                key: connectionString
+          - name: PORT
+            value: '3004'
+          - name: AUTH_HOST
+            value: auth-tcp
+          - name: AUTH_PORT
+            value: '3002'
+          - name: PAYMENT_HOST
+            value: payments
+          - name: PAYMENT_PORT
+            value: '3001'
+        ports:
+          - containerPort: 3004
