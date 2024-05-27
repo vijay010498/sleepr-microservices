@@ -4,8 +4,8 @@ steps:
     args: [
       'build',
       '-t',
-      'northamerica-northeast2-docker.pkg.dev/sleepr-424523/reservations/production'
-      '-f'
+      'northamerica-northeast2-docker.pkg.dev/sleepr-424523/reservations/production',
+      '-f',
       'apps/reservations/Dockerfile',
       '.'
     ]
@@ -19,8 +19,8 @@ steps:
     args: [
       'build',
       '-t',
-      'northamerica-northeast2-docker.pkg.dev/sleepr-424523/auth/production'
-      '-f'
+      'northamerica-northeast2-docker.pkg.dev/sleepr-424523/auth/production',
+      '-f',
       'apps/auth/Dockerfile',
       '.'
     ]
@@ -29,13 +29,13 @@ steps:
     args:
       ['push', 'northamerica-northeast2-docker.pkg.dev/sleepr-424523/auth/production']
 
-# notifications
+  # notifications
   - name: 'gcr.io/cloud-builders/docker'
     args: [
       'build',
       '-t',
-      'northamerica-northeast2-docker.pkg.dev/sleepr-424523/notifications/production'
-      '-f'
+      'northamerica-northeast2-docker.pkg.dev/sleepr-424523/notifications/production',
+      '-f',
       'apps/notifications/Dockerfile',
       '.'
     ]
@@ -44,13 +44,13 @@ steps:
     args:
       ['push', 'northamerica-northeast2-docker.pkg.dev/sleepr-424523/notifications/production']
 
-  #payments
+  # payments
   - name: 'gcr.io/cloud-builders/docker'
     args: [
       'build',
       '-t',
-      'northamerica-northeast2-docker.pkg.dev/sleepr-424523/payments/production'
-      '-f'
+      'northamerica-northeast2-docker.pkg.dev/sleepr-424523/payments/production',
+      '-f',
       'apps/payments/Dockerfile',
       '.'
     ]
