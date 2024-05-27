@@ -15,6 +15,9 @@ RUN pnpm install
 COPY apps/notifications apps/notifications
 COPY libs libs
 
+# Install microservice specific dependicies
+RUN cd apps/notifications && pnpm install
+
 RUN pnpm run build
 
 FROM node:alpine As production

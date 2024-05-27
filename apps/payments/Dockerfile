@@ -15,6 +15,9 @@ RUN pnpm install
 COPY apps/payments apps/payments
 COPY libs libs
 
+# Install microservice specific dependicies
+RUN cd apps/payments && pnpm install
+
 RUN pnpm run build
 
 FROM node:alpine As production
