@@ -5,6 +5,7 @@ import { ReservationsRepository } from './reservations.repository';
 import { PAYMENT_SERVICE, UserDto } from '@app/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { map } from 'rxjs';
+import { Reservation } from './models/reservation.entity';
 
 @Injectable()
 export class ReservationsService {
@@ -36,12 +37,13 @@ export class ReservationsService {
       })
       .pipe(
         map((res) => {
-          return this.reservationsRepo.create({
+          const reservation = new Reservation({
             ...createReservationDto,
             invoiceId: res.id,
             timestamp: new Date(),
             userId,
           });
+          return this.reservationsRepo.create(reservation);
         }),
       );
   }
@@ -50,26 +52,24 @@ export class ReservationsService {
     return this.reservationsRepo.find({});
   }
 
-  async findOne(_id: string) {
+  async findOne(id: number) {
     return this.reservationsRepo.findOne({
-      _id,
+      id,
     });
   }
 
-  async update(_id: string, updateReservationDto: UpdateReservationDto) {
+  async update(id: number, updateReservationDto: UpdateReservationDto) {
     return this.reservationsRepo.findOneAndUpdate(
       {
-        _id,
+        id,
       },
-      {
-        $set: updateReservationDto,
-      },
+      updateReservationDto,
     );
   }
 
-  async remove(_id: string) {
+  async remove(id: number) {
     return this.reservationsRepo.findOneAndDelete({
-      _id,
+      id,
     });
   }
 }

@@ -4,7 +4,7 @@ import { LocalAuthGuard } from './guards/local-auth.guard';
 import { Response } from 'express';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
-import { CurrentUser, UsersDocument } from '@app/common';
+import { CurrentUser, User } from '@app/common';
 
 @Controller()
 export class AuthController {
@@ -13,7 +13,7 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(
-    @CurrentUser() user: UsersDocument,
+    @CurrentUser() user: User,
     @Res({ passthrough: true }) response: Response, // passthrough to send cookie manually
   ) {
     await this.authService.login(user, response);
