@@ -1,0 +1,25 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - aws ecr get-login-password --region ca-central-1 | docker login --username AWS --password-stdin 414388150256.dkr.ecr.ca-central-1.amazonaws.com
+  build:
+    commands:
+      - docker build -t sleepr-reservations . ./apps/reservations/Dockerfile .
+      - docker tag sleepr-reservations:latest 414388150256.dkr.ecr.ca-central-1.amazonaws.com/sleepr-reservations:latest
+
+      - docker build -t sleepr-auth . ./apps/auth/Dockerfile .
+      - docker tag sleepr-auth:latest 414388150256.dkr.ecr.ca-central-1.amazonaws.com/sleepr-auth:latest
+
+      - docker build -t sleepr-payments . ./apps/payments/Dockerfile .
+      - docker tag sleepr-payments:latest 414388150256.dkr.ecr.ca-central-1.amazonaws.com/sleepr-payments:latest
+
+      - docker build -t sleepr-notifications . ./apps/notifications/Dockerfile .
+      - docker tag sleepr-notifications:latest 414388150256.dkr.ecr.ca-central-1.amazonaws.com/sleepr-notifications:latest
+  post_build:
+    commands:
+      - docker push 414388150256.dkr.ecr.ca-central-1.amazonaws.com/sleepr-reservations:latest
+      - docker push 414388150256.dkr.ecr.ca-central-1.amazonaws.com/sleepr-auth:latest
+      - docker push 414388150256.dkr.ecr.ca-central-1.amazonaws.com/sleepr-payments:latest
+      - docker push 414388150256.dkr.ecr.ca-central-1.amazonaws.com/sleepr-notifications:latest
