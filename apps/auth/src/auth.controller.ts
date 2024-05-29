@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { Response } from 'express';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { CurrentUser, UsersDocument } from '@app/common';
+import { LoginDto } from './users/dto/login.dto';
 
 @Controller()
 export class AuthController {
@@ -14,6 +15,7 @@ export class AuthController {
   @Post('login')
   async login(
     @CurrentUser() user: UsersDocument,
+    @Body() loginDto: LoginDto,
     @Res({ passthrough: true }) response: Response, // passthrough to send cookie manually
   ) {
     await this.authService.login(user, response);

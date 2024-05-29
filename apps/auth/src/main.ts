@@ -5,6 +5,7 @@ import { Logger } from 'nestjs-pino';
 import { ConfigService } from '@nestjs/config';
 import * as cookieParser from 'cookie-parser';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { SwaggerConfig } from '@app/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AuthModule);
@@ -24,6 +25,7 @@ async function bootstrap() {
   );
   app.useLogger(app.get(Logger));
   await app.startAllMicroservices();
+  new SwaggerConfig(app, 'api');
   await app.listen(configService.get('HTTP_PORT'));
 }
 bootstrap();

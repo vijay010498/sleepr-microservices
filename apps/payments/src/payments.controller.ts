@@ -14,6 +14,7 @@ export class PaymentsController {
     }),
   )
   async createCharge(@Payload() data: PaymentsCreateChargeDto) {
+    throw new Error();
     return this.paymentsService.createCharge(data);
   }
 }
