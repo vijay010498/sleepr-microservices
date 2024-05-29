@@ -1,11 +1,13 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import Stripe from 'stripe';
 import { ConfigService } from '@nestjs/config';
 import { CreateChargeDto, NOTIFICATIONS_SERVICE } from '@app/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { PaymentsCreateChargeDto } from './dto/payments-create-charge.dto';
+import { lastValueFrom } from 'rxjs';
 @Injectable()
 export class PaymentsService {
+  private readonly logger = new Logger(PaymentsService.name);
   private readonly stripe = new Stripe(
     this.configService.get<string>('STRIPE_SECRET_KEY'),
     {
@@ -36,10 +38,14 @@ export class PaymentsService {
       },
       //payment_method_types: ['card'],
     });
-    this.notificationsService.emit('notify_email', {
+    const notification$ = this.notificationsService.emit('notify_email', {
       email,
       text: `Payment of $${amount} completed successfully`,
     });
+
+    await lastValueFrom(notification$);
+
+    this.logger.log('Dispatched "notify_email" event');
     return paymentIntent;
   }
 }

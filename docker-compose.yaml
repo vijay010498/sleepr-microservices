@@ -37,3 +37,7 @@ services:
       - ./apps/notifications/.env
   mongo:
     image: mongo
+  rabbitmq:
+    image: rabbitmq
+    ports:
+      - '5672:5672'
