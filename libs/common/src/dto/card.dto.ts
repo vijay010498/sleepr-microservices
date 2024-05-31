@@ -14,7 +14,7 @@ export class CardDto {
   /**
    * Two-digit number representing the card's expiration month.
    */
-  @IsString()
+  @IsNumber()
   @Field()
   exp_month: number;
 
