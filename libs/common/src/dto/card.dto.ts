@@ -1,6 +1,7 @@
 import { IsCreditCard, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { CardMessage } from '@app/common/types';
 
-export class CardDto {
+export class CardDto implements CardMessage {
   /**
    * The card's CVC. It is highly recommended to always include this value.
    */
@@ -12,13 +13,13 @@ export class CardDto {
    * Two-digit number representing the card's expiration month.
    */
   @IsString()
-  exp_month: number;
+  expMonth: number;
 
   /**
    * Four-digit number representing the card's expiration year.
    */
   @IsNumber()
-  exp_year: number;
+  expYear: number;
 
   /**
    * The card number, as a string without any separators.

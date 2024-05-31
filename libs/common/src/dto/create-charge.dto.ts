@@ -6,8 +6,11 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import { CreateChargeMessage } from '@app/common/types';
 
-export class CreateChargeDto {
+export class CreateChargeDto implements Omit<CreateChargeMessage, 'email'> {
+  // omit except email property
+  // CreateChargeMessage use prototypes but still validate using class-validator and transformer
   @IsDefined()
   @IsNotEmptyObject()
   @ValidateNested()
