@@ -14,6 +14,7 @@ RUN npm install -g pnpm
 
 COPY apps/notifications apps/notifications
 COPY libs libs
+COPY proto proto
 
 # Install microservice specific dependicies
 RUN pnpm install -r --force

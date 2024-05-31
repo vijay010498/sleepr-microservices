@@ -14,6 +14,7 @@ RUN npm install -g pnpm
 
 COPY apps/auth apps/auth
 COPY libs libs
+COPY proto proto
 
 # Install microservice specific dependicies
 RUN pnpm install -r --force

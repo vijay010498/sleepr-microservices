@@ -12,7 +12,7 @@ export class CardDto implements CardMessage {
   /**
    * Two-digit number representing the card's expiration month.
    */
-  @IsString()
+  @IsNumber()
   expMonth: number;
 
   /**

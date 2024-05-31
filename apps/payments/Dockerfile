@@ -14,6 +14,7 @@ RUN npm install -g pnpm
 
 COPY apps/payments apps/payments
 COPY libs libs
+COPY proto proto
 
 # Install microservice specific dependicies
 #RUN cd apps/payments && pnpm install --force
