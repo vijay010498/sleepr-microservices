@@ -22,5 +22,4 @@ export class SwaggerConfig {
     const document = SwaggerModule.createDocument(this.app, options);
     SwaggerModule.setup(this.path, this.app, document);
   }
-
 }

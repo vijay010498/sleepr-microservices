@@ -35,5 +35,15 @@ services:
     command: pnpm run start:dev notifications # override cmd defined in DockerFile
     env_file:
       - ./apps/notifications/.env
+  gateway:
+    build:
+      context: .
+      dockerfile: ./apps/gateway/Dockerfile
+      target: development
+    command: pnpm run start:dev gateway # override cmd defined in DockerFile
+    env_file:
+      - ./apps/gateway/.env
+    ports:
+      - '3004:3004'
   mongo:
     image: mongo
