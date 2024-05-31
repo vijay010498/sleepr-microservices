@@ -27,6 +27,10 @@ import { authContext } from './auth.context';
                   name: 'reservations',
                   url: configService.getOrThrow('RESERVATIONS_GRAPHQL_URL'),
                 },
+                {
+                  name: 'auth',
+                  url: configService.getOrThrow('AUTH_GRAPHQL_URL'),
+                },
               ],
             }),
             buildService({ url }) {
