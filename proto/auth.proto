@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package auth;
+
+service AuthService {
+  rpc Authenticate (Authentication) returns (UserMessage) {}
+}
+
+message Authentication {
+  string Authentication = 1; // all are ordered
+}
+
+message UserMessage {
+  string id = 1; // rpc does not support _  so _id is mapped to id inside service
+  string email = 2;
+  string password = 3;
+  repeated string roles = 4; // repeated = Array
+}
